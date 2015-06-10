@@ -15,6 +15,7 @@ typedef struct {
     char name[255];
     int lives;
     int score;
+    int gamesWon;
 } Player;
 
 Player player1;
@@ -48,6 +49,11 @@ int main(int argc, const char * argv[]) {
         
         if(askQuestion(playersTurn)) {
             // Question was answered correctly
+            if (playersTurn == 1) {
+                player1.score++;
+            } else if (playersTurn == 2) {
+                player2.score++;
+            }
             printf("Right! \n");
         } else {
             // Question was answered incorrectly
@@ -61,6 +67,8 @@ int main(int argc, const char * argv[]) {
                 player2.lives--;
                 printf("Player 2 Lives = %d \n", player2.lives);
             }
+            
+            printf("Player 1 Score = %d \nPlayer 2 Score = %d \n", player1.score, player2.score);
         }
         
         if (playersTurn == 1) {
@@ -72,16 +80,6 @@ int main(int argc, const char * argv[]) {
         if (player1.lives == 0 || player2.lives == 0) {
             endGame();
         }
-        // Ask a question (use function)
-        // If incorrect, take off one life
-        // Move on to the next player, unless the game is over
-            // If the game is over call the gameover function
-            // The gameover function asks if the player wants to continue
-            // If no, the function returns a bool "false"
-                // We use this to end the while loop and exit the program
-            // If yes, the function returns a bool "true"
-                // Initalize player 1 and 2's lives
-        
         
     }
     
@@ -89,6 +87,8 @@ int main(int argc, const char * argv[]) {
 }
 
 void setupNewGame() {
+    player1.score = 0;
+    player2.score = 0;
     player1.lives = 3;
     player2.lives = 3;
     playersTurn = 1;
@@ -97,6 +97,16 @@ void setupNewGame() {
 
 void endGame() {
     playingGame = false;
+    
+    if (player1.score > player2.score) {
+        player1.gamesWon++;
+    } else if (player2.score > player1.score) {
+        player2.gamesWon++;
+    } else {
+        player1.gamesWon++;
+        player2.gamesWon++;
+    }
+    
     
     bool askForNewGame = true;
     while (askForNewGame) {
